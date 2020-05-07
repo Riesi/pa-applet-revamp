@@ -11,6 +11,8 @@ if test "x$ac_cv_prog_cc_c99" = "xno"; then
 fi
 AC_HEADER_STDC
 
+AC_SEARCH_LIBS([round], [m])
+
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([GTK3], [gtk+-3.0])
 PKG_CHECK_MODULES([LIBPULSE], [libpulse])
