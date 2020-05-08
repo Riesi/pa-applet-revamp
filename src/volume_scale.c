@@ -85,10 +85,8 @@ static void do_show_volume_scale(GdkRectangle *rect_or_null)
 
         // Find the coordinates of the monitor
         GdkRectangle monitor_rect;
-        GdkScreen *screen = gtk_widget_get_screen(window);
-        gint monitor = gdk_screen_get_monitor_at_point(screen, rect_or_null->x, rect_or_null->y);
-        gdk_screen_get_monitor_geometry(screen, monitor, &monitor_rect);//TODO deprecations
-
+        GdkMonitor *monitor = gdk_display_get_monitor_at_point(gdk_display_get_default(), rect_or_null->x, rect_or_null->y);
+        gdk_monitor_get_geometry(monitor, &monitor_rect);
         // If the Y position is outside the monitor rect, the tray is at the top
         if (y < monitor_rect.y) {
             y = rect_or_null->y + rect_or_null->height;
@@ -121,8 +119,8 @@ static void on_pointer_press(GtkWidget *widget, GdkEventButton *event, gpointer 
     }
 
     // Ungrab it
-    gdk_device_ungrab(device, GDK_CURRENT_TIME);
-    gdk_flush();//TODO deprecations
+    gdk_seat_ungrab(gdk_display_get_default_seat(gdk_display_get_default()));
+    gdk_display_flush(gdk_display_get_default());
 }
 
 void show_volume_scale(GdkRectangle *rect_or_null)
@@ -141,9 +139,9 @@ void show_volume_scale(GdkRectangle *rect_or_null)
 
     // Grab it so we can hide the scale when the user clicks outside it
     g_signal_connect_after(G_OBJECT(window), "button_press_event", G_CALLBACK(on_pointer_press), NULL);
-    gdk_device_grab(device, gtk_widget_get_window(window), GDK_OWNERSHIP_NONE,
-            TRUE, GDK_BUTTON_PRESS_MASK, NULL, GDK_CURRENT_TIME);
-    gdk_flush();//TODO deprecations
+    gdk_seat_grab(gdk_display_get_default_seat(gdk_display_get_default()), gtk_widget_get_window(window), 
+                  GDK_SEAT_CAPABILITY_POINTER, TRUE, NULL, NULL, NULL, NULL);
+    gdk_display_flush(gdk_display_get_default());
 }
 
 static gboolean on_flash_timeout(gpointer data)
