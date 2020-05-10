@@ -1,0 +1,12 @@
+project('pa-applet-revamp', 'c')
+gtkdep = dependency('gtk+-3.0', required : true)
+pulsedep = dependency('libpulse', required : true)
+pulseglibdep = dependency('libpulse-mainloop-glib', required : true)
+notifydep = dependency('libnotify', required : true)
+cc = meson.get_compiler('c')
+mathdep =  cc.find_library('m', required : true)
+glibdep = dependency('glib-2.0', required : true)
+x11dep = dependency('x11', required : true)
+subdir('src')
+
+executable('pa-applet-revamp', src, dependencies : [mathdep, gtkdep, pulsedep, pulseglibdep, notifydep, x11dep])
