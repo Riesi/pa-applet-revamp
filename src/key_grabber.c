@@ -91,14 +91,7 @@ void key_grabber_grab_keys(void)
 
         // Try to grab the keycodes with any modifiers
         gdk_x11_display_error_trap_push(gdkDisplay);
-        XGrabKey(dpy, keycode, 0, root, True, GrabModeAsync, GrabModeAsync);
-        XGrabKey(dpy, keycode, Mod2Mask, root, True, GrabModeAsync, GrabModeAsync);
-        XGrabKey(dpy, keycode, Mod5Mask, root, True, GrabModeAsync, GrabModeAsync);
-        XGrabKey(dpy, keycode, LockMask, root, True, GrabModeAsync, GrabModeAsync);
-        XGrabKey(dpy, keycode, Mod2Mask | Mod5Mask, root, True, GrabModeAsync, GrabModeAsync);
-        XGrabKey(dpy, keycode, Mod2Mask | LockMask, root, True, GrabModeAsync, GrabModeAsync);
-        XGrabKey(dpy, keycode, Mod5Mask | LockMask, root, True, GrabModeAsync, GrabModeAsync);
-        XGrabKey(dpy, keycode, Mod2Mask | Mod5Mask | LockMask, root, True, GrabModeAsync, GrabModeAsync);
+        XGrabKey(dpy, keycode, AnyModifier, root, True, GrabModeAsync, GrabModeAsync);
         gdk_display_flush(gdkDisplay);
 
         // Handle errors
@@ -131,13 +124,7 @@ void key_grabber_ungrab_keys(void)
 
         // Ungrab everything
         gdk_x11_display_error_trap_push(gdkDisplay);
-        XUngrabKey(dpy, keycode, Mod2Mask, root);
-        XUngrabKey(dpy, keycode, Mod5Mask, root);
-        XUngrabKey(dpy, keycode, LockMask, root);
-        XUngrabKey(dpy, keycode, Mod2Mask | Mod5Mask, root);
-        XUngrabKey(dpy, keycode, Mod2Mask | LockMask, root);
-        XUngrabKey(dpy, keycode, Mod5Mask | LockMask, root);
-        XUngrabKey(dpy, keycode, Mod2Mask | Mod5Mask | LockMask, root);
+        XUngrabKey(dpy, keycode, AnyModifier, root);
         gdk_display_flush(gdkDisplay);
         if (gdk_x11_display_error_trap_pop(gdkDisplay))
             g_printerr("Failed to ungrab %s\n", keysym_names[i]);
